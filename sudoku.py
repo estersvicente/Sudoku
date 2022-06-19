@@ -64,6 +64,9 @@ class Sudoku:
             print("".join(n + s for n, s in zip(n[r - 1], line1.split("."))))
             print([line2, line3, line4][(r % self.side == 0) + (r % Sudoku.BASE == 0)])
 
+    def get_partial_sudoku_matrix(self):
+        return self.partial_board
+
     def __str__(self):
         s = ''
         for line in self.solution:
