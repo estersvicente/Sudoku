@@ -8,7 +8,8 @@ if play.lower() == 'y':
 else:
     print('Ok, goodbye!')
 
-solution = input('Would you like the solution? (type Y for Yes and N for No)\n')
-if solution.upper() == 'Y':
+solution = input('Would you like the solution? (type "y" for Yes and "n" for No)\n')
+if solution.lower() == 'y':
     print(s)
-    
+else:
+    print('Ok, goodbye!')
