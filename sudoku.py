@@ -40,8 +40,8 @@ class Sudoku:
         :return: A incomplete sudoku board in matrix form (with 0 for the spaces that need to be completed)
         """
         base = range(Sudoku.BASE)
-        rows = [g * Sudoku.BASE + r for g in Sudoku.shuffle(base) for r in Sudoku.shuffle(base)]
-        cols = [g * Sudoku.BASE + c for g in Sudoku.shuffle(base) for c in Sudoku.shuffle(base)]
+        rows = [x * Sudoku.BASE + r for x in Sudoku.shuffle(base) for r in Sudoku.shuffle(base)]
+        cols = [y * Sudoku.BASE + c for y in Sudoku.shuffle(base) for c in Sudoku.shuffle(base)]
         nums = Sudoku.shuffle(range(1, Sudoku.BASE * Sudoku.BASE + 1))
         self.board = [[nums[Sudoku.pattern(self, r, c)] for c in cols] for r in rows]
         self.solution = np.copy(self.board)
@@ -58,10 +58,10 @@ class Sudoku:
         line4 = Sudoku.expand_line("╚═══╧═══╩═══╝")
 
         symbol = " 1234567890"
-        nums = [[""] + [symbol[n] for n in row] for row in self.board]
+        n = [[""] + [symbol[n] for n in row] for row in self.board]
         print(line0)
         for r in range(1, self.side + 1):
-            print("".join(n + s for n, s in zip(nums[r - 1], line1.split("."))))
+            print("".join(n + s for n, s in zip(n[r - 1], line1.split("."))))
             print([line2, line3, line4][(r % self.side == 0) + (r % Sudoku.BASE == 0)])
 
     def __str__(self):
