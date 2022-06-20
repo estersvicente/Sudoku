@@ -9,28 +9,30 @@ class SudokuSolver:
 
     def solve_sudoku(self, board):
         """
-
-        :param board:
-        :return:
+        Solves a sudoku matrix using backtracking algorithm
+        :param board: sudoku board in a 9x9 matrix -- with zeros for the empty spaces
+        :return: True or False if the matrix is solved or not
         """
         s = SudokuSolver()
         empty = s.find_empty_cells(board)
-        if not empty:  # no empty spots are left so the board is solved
+
+        # If there are no more empty spots on the board, it is solved
+        if not empty:
             return True
 
+        # Checks the validity of every possible number (1-9) in each position
         for nums in range(9):
             if s.isvalid(board, empty, nums + 1):
                 board[empty[0]][empty[1]] = nums + 1
-
                 if s.solve_sudoku(board):  # recursive step
                     for line in board:
                         self.solved_board.append(line)
                     return True
-                board[empty[0]][empty[1]] = 0  # this number is wrong so we set it back to 0
+                # If the number is wrong, we set it back to 0 (empty)
+                board[empty[0]][empty[1]] = 0
         return False
 
     @staticmethod
-    # Functions used to solve the board and check valid values
     def find_empty_cells(grid):
         """
         Finds empty cell on a sudoku grid (represented by 0)
@@ -74,10 +76,10 @@ class SudokuSolver:
         # If all tests pass the number is valid in that position
         return True
 
-    def get_solved_board(self):
-        return self.solved_board
-
     def __str__(self):
+        """
+        returns solved matrix in string form for easier comparison
+        """
         s = ''
         for line in self.solved_board:
             s += str(line) + '\n'
