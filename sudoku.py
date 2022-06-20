@@ -14,14 +14,12 @@ class Sudoku:
         self.board = []
         self.partial_board = []
         self.solution = []
-        self.side = Sudoku.BASE * Sudoku.BASE
-        self.num_size = len(str(self.side))
 
     def pattern(self, r, c):
         """
         Creates a valid sudoku grid patter (9x9 matrix)
         """
-        pattern = (Sudoku.BASE * (r % Sudoku.BASE) + r // Sudoku.BASE + c) % self.side
+        pattern = (Sudoku.BASE * (r % Sudoku.BASE) + r // Sudoku.BASE + c) % Sudoku.SIDE
         if self:
             return pattern
 
@@ -55,12 +53,12 @@ class Sudoku:
         self.board = [[nums[Sudoku.pattern(self, r, c)] for c in cols] for r in rows]
         # Copies the sudoku solution before removing the numbers
         self.solution = np.copy(self.board)
-        squares = self.side * self.side
+        squares = Sudoku.SIDE * Sudoku.SIDE
         # Leaves 30 numbers on the grid --> minimum of numbers on the grid is 17 any lower than that the sudoku will
         # have multiple solutions
         empties = squares * 51 // 81
         for p in sample(range(squares), empties):
-            self.board[p // self.side][p % self.side] = 0
+            self.board[p // Sudoku.SIDE][p % Sudoku.SIDE] = 0
         self.partial_board = np.copy(self.board)
 
     def print_grid(self):
@@ -76,9 +74,9 @@ class Sudoku:
         symbol = " 1234567890"
         nums = [[""] + [symbol[n] for n in row] for row in self.board]
         print(line0)
-        for r in range(1, self.side + 1):
+        for r in range(1, Sudoku.SIDE + 1):
             print("".join(n + s for n, s in zip(nums[r - 1], line1.split("."))))
-            print([line2, line3, line4][(r % self.side == 0) + (r % Sudoku.BASE == 0)])
+            print([line2, line3, line4][(r % Sudoku.SIDE == 0) + (r % Sudoku.BASE == 0)])
 
     def get_partial_sudoku_matrix(self):
         """
