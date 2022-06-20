@@ -48,7 +48,7 @@ class Sudoku:
         self.board = [[nums[Sudoku.pattern(self, r, c)] for c in cols] for r in rows]
         self.solution = np.copy(self.board)
         squares = self.side * self.side
-        empties = squares * 46 // 81
+        empties = squares * 51 // 81
         for p in sample(range(squares), empties):
             self.board[p // self.side][p % self.side] = 0
         self.partial_board = np.copy(self.board)
