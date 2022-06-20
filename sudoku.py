@@ -8,9 +8,11 @@ class Sudoku:
     Creates randomized sudoku boards (9x9) and outputs them in grid form
     """
     BASE = 3
+    SIDE = BASE * BASE
 
     def __init__(self):
         self.board = []
+        self.partial_board = []
         self.solution = []
         self.side = Sudoku.BASE * Sudoku.BASE
         self.num_size = len(str(self.side))
@@ -40,15 +42,16 @@ class Sudoku:
         :return: A incomplete sudoku board in matrix form (with 0 for the spaces that need to be completed)
         """
         base = range(Sudoku.BASE)
-        rows = [x * Sudoku.BASE + r for x in Sudoku.shuffle(base) for r in Sudoku.shuffle(base)]
-        cols = [y * Sudoku.BASE + c for y in Sudoku.shuffle(base) for c in Sudoku.shuffle(base)]
+        rows = [g * Sudoku.BASE + r for g in Sudoku.shuffle(base) for r in Sudoku.shuffle(base)]
+        cols = [g * Sudoku.BASE + c for g in Sudoku.shuffle(base) for c in Sudoku.shuffle(base)]
         nums = Sudoku.shuffle(range(1, Sudoku.BASE * Sudoku.BASE + 1))
         self.board = [[nums[Sudoku.pattern(self, r, c)] for c in cols] for r in rows]
         self.solution = np.copy(self.board)
         squares = self.side * self.side
-        empties = squares * 3 // 4
+        empties = squares * 46 // 81
         for p in sample(range(squares), empties):
             self.board[p // self.side][p % self.side] = 0
+        self.partial_board = np.copy(self.board)
 
     def print_grid(self):
         line0 = Sudoku.expand_line("╔═══╤═══╦═══╗")
@@ -58,10 +61,10 @@ class Sudoku:
         line4 = Sudoku.expand_line("╚═══╧═══╩═══╝")
 
         symbol = " 1234567890"
-        n = [[""] + [symbol[n] for n in row] for row in self.board]
+        nums = [[""] + [symbol[n] for n in row] for row in self.board]
         print(line0)
         for r in range(1, self.side + 1):
-            print("".join(n + s for n, s in zip(n[r - 1], line1.split("."))))
+            print("".join(n + s for n, s in zip(nums[r - 1], line1.split("."))))
             print([line2, line3, line4][(r % self.side == 0) + (r % Sudoku.BASE == 0)])
 
     def get_partial_sudoku_matrix(self):
