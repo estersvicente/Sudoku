@@ -5,12 +5,13 @@ class SudokuSolver:
     def __init__(self):
         self.board = []
         self.solved_board = []
+        self.solution = ''
 
     def solve_sudoku(self, board):
         """
-        Solving a classic Sudoku by using backtracking algorithm
-        :param board: 9x9 sudoku board
-        :return: solved sudoku board
+
+        :param board:
+        :return:
         """
         s = SudokuSolver()
         empty = s.find_empty_cells(board)
@@ -42,39 +43,43 @@ class SudokuSolver:
                     return (i, j)
 
     @staticmethod
-    def isvalid(grid, position, number):
+    def isvalid(grid, pos, n):
         """
         Checks if a number is valid in that coordinate on the sudoku board
         :param grid: sudoku board
-        :param position: coordinate for that number (tuple)
-        :param number: positive integer from 1-9
+        :param pos: coordinate for that number (tuple)
+        :param n: positive integer from 1-9
         :return: True or False if the number is in valid position
         """
         # Compares number coordinates to check if this is the number we are looking for
         for i in range(9):
-            if grid[i][position[1]] == number and (i, position[1]) != position:
+            if grid[i][pos[1]] == n and (i, pos[1]) != pos:
                 return False
 
         # Compares row and number, this way we can know if the number is in the correct row
         # but in the incorrect spot
         for j in range(9):
-            if grid[position[0][j]] == number and (position[0], j) != position:
+            if grid[pos[0]][j] == n and (pos[0], j) != pos:
                 return False
 
-        start_i = position[0] - position[0] % 3
-        start_j = position[1] - position[1] % 3
+        start_i = pos[0] - pos[0] % 3
+        start_j = pos[1] - pos[1] % 3
 
         # Checking if the number and coordinates are valid for each number
         # in the sub-matrix (3x3) squares
         for x in range(3):
             for y in range(3):
-                if grid[start_i + x][start_j + y] == number and (start_i+x, start_j+y) != position:
+                if grid[start_i + x][start_j + y] == n and (start_i+x, start_j+y) != pos:
                     return False
         # If all tests pass the number is valid in that position
         return True
+
+    def get_solved_board(self):
+        return self.solved_board
 
     def __str__(self):
         s = ''
         for line in self.solved_board:
             s += str(line) + '\n'
+        self.solution = s[:]
         return s
