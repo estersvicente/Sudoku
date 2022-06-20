@@ -18,6 +18,9 @@ class Sudoku:
         self.num_size = len(str(self.side))
 
     def pattern(self, r, c):
+        """
+        Creates a valid sudoku grid patter (9x9 matrix)
+        """
         pattern = (Sudoku.BASE * (r % Sudoku.BASE) + r // Sudoku.BASE + c) % self.side
         if self:
             return pattern
@@ -33,6 +36,9 @@ class Sudoku:
 
     @staticmethod
     def expand_line(line):
+        """
+        Expand lines to create the classic grid pattern (dividing the sub-squares with bold lines and bold outline)
+        """
         return line[0] + line[5:9].join([line[1:5] * (Sudoku.BASE - 1)] * Sudoku.BASE) + line[9:13]
 
     def generate_board(self):
@@ -41,19 +47,26 @@ class Sudoku:
         (this creates a board of difficulty easy)
         :return: A incomplete sudoku board in matrix form (with 0 for the spaces that need to be completed)
         """
+        # Creates random rows and columns and shuffles them according to the permitted permutations in a sudoku grid
         base = range(Sudoku.BASE)
         rows = [g * Sudoku.BASE + r for g in Sudoku.shuffle(base) for r in Sudoku.shuffle(base)]
         cols = [g * Sudoku.BASE + c for g in Sudoku.shuffle(base) for c in Sudoku.shuffle(base)]
         nums = Sudoku.shuffle(range(1, Sudoku.BASE * Sudoku.BASE + 1))
         self.board = [[nums[Sudoku.pattern(self, r, c)] for c in cols] for r in rows]
+        # Copies the sudoku solution before removing the numbers
         self.solution = np.copy(self.board)
         squares = self.side * self.side
+        # Leaves 30 numbers on the grid --> minimum of numbers on the grid is 17 any lower than that the sudoku will
+        # have multiple solutions
         empties = squares * 51 // 81
         for p in sample(range(squares), empties):
             self.board[p // self.side][p % self.side] = 0
         self.partial_board = np.copy(self.board)
 
     def print_grid(self):
+        """
+        Prints sudoku grid with each number in one square and 0 numbers making up for empty squares
+        """
         line0 = Sudoku.expand_line("╔═══╤═══╦═══╗")
         line1 = Sudoku.expand_line("║ . │ . ║ . ║")
         line2 = Sudoku.expand_line("╟───┼───╫───╢")
@@ -68,6 +81,9 @@ class Sudoku:
             print([line2, line3, line4][(r % self.side == 0) + (r % Sudoku.BASE == 0)])
 
     def get_partial_sudoku_matrix(self):
+        """
+        Returns unsolved sudoku matrices with 0 for the removed numbers (empty spaces)
+        """
         return self.partial_board
 
     def __str__(self):
