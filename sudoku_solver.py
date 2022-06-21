@@ -3,9 +3,7 @@ class SudokuSolver:
     Solves a classic sudoku board (9x9) via the backtracking algorithm
     """
     def __init__(self):
-        self.board = []
         self.solved_board = []
-        self.solution = ''
 
     def solve_sudoku(self, board):
         """
@@ -83,5 +81,4 @@ class SudokuSolver:
         s = ''
         for line in self.solved_board:
             s += str(line) + '\n'
-        self.solution = s[:]
         return s
