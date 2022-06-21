@@ -15,13 +15,12 @@ class Sudoku:
         self.partial_board = []
         self.solution = []
 
-    def pattern(self, r, c):
+    @staticmethod
+    def pattern(r, c):
         """
         Creates a valid sudoku grid patter (9x9 matrix)
         """
-        pattern = (Sudoku.BASE * (r % Sudoku.BASE) + r // Sudoku.BASE + c) % Sudoku.SIDE
-        if self:
-            return pattern
+        return (Sudoku.BASE * (r % Sudoku.BASE) + r // Sudoku.BASE + c) % Sudoku.SIDE
 
     @staticmethod
     def shuffle(s):
@@ -50,7 +49,7 @@ class Sudoku:
         rows = [g * Sudoku.BASE + r for g in Sudoku.shuffle(base) for r in Sudoku.shuffle(base)]
         cols = [g * Sudoku.BASE + c for g in Sudoku.shuffle(base) for c in Sudoku.shuffle(base)]
         nums = Sudoku.shuffle(range(1, Sudoku.BASE * Sudoku.BASE + 1))
-        self.board = [[nums[Sudoku.pattern(self, r, c)] for c in cols] for r in rows]
+        self.board = [[nums[Sudoku.pattern(r, c)] for c in cols] for r in rows]
         # Copies the sudoku solution before removing the numbers
         self.solution = np.copy(self.board)
         squares = Sudoku.SIDE * Sudoku.SIDE
